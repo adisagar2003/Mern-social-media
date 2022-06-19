@@ -1,4 +1,6 @@
 import React from 'react'
+import { GoogleLogin } from '@react-oauth/google';
+import {GoogleOAuthProvider} from '@react-oauth/google';
 
 function SignIn() {
   return (
@@ -22,6 +24,16 @@ function SignIn() {
             <div class="grid grid-cols-3 gap-1">
                 <button type="button" class="transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal text-center inline-block">MailUp</button>
                 <button type="button" class="transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal text-center inline-block">Google</button>
+                <GoogleOAuthProvider clientId="236836718639-hol81mpdksfikn4354praeabvvst4tp4.apps.googleusercontent.com">
+<GoogleLogin
+  onSuccess={credentialResponse => {
+    console.log(credentialResponse);
+  }}
+  onError={() => {
+    console.log('Login Failed');
+  }}
+/>;
+  </GoogleOAuthProvider>;
                 <button type="button" class="transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal text-center inline-block">Github</button>
             </div>
         </div>

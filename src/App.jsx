@@ -4,6 +4,7 @@ import './App.css'
 import SignIn from './Components/Auth/SignIn'
 import { GoogleLogin } from '@react-oauth/google';
 import {GoogleOAuthProvider} from '@react-oauth/google';
+import Post from './Components/Posts/Post';
 
 
 function App() {
@@ -17,17 +18,8 @@ const responseGoogle =async (res)=>{
   return (
     <div className="App">
    
-<GoogleOAuthProvider clientId="236836718639-hol81mpdksfikn4354praeabvvst4tp4.apps.googleusercontent.com">
-<GoogleLogin
-  onSuccess={credentialResponse => {
-    console.log(credentialResponse);
-  }}
-  onError={() => {
-    console.log('Login Failed');
-  }}
-/>;
-  </GoogleOAuthProvider>;
-    
+
+<Post />
 <SignIn />
     </div>
   )
