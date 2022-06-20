@@ -4,6 +4,7 @@ import {GoogleOAuthProvider} from '@react-oauth/google';
 import axios from 'axios';
 
 
+
 function SignIn() {
   const [credFound,setCredFound] = useState(null);
   const [firstName,setFirstName] = useState('');
@@ -11,23 +12,97 @@ function SignIn() {
   const [email,setEmail ] = useState('');     
   const [loading,isLoading]  = useState(false);
   const [googleLanding,setgoogleLanding] = useState(false);
+  const [showAlert,setAlert] = useState(false);
+  const [error,setError] = useState(false);
+  const [password,setPassword] = useState('');
   
+  const loginMechanism = () =>{
+    console.log('clicked')
+    axios.post('http://localhost:5000/signIn',{
+      email:email,
+      password:password
+    }).then((response)=>{
+      console.log('I did it!')
+      console.log(response)
+    }).catch(()=>{
+      console.log('err')
+    })
+
+  }
+
+
+
   useEffect(()=>{
     console.log('credFound')
   },[credFound])
 
   const AfterGoogleAuth = () =>{
+
+    //
+    const createUser = () => {
+      axios.post('http://localhost:5000/addUserToDataBase',{
+        firstName:firstName,
+        lastName:lastName,
+        email:email,
+        credential:credential
+      }).then((response)=>{
+        if (response.data.error){
+      setError(true);
+          
+        }
+        else{
+          console.log(response)
+          setAlert(true);
+          setTimeout(()=>setAlert(false),3000)
+        }
+      
+      
+  
+      })
+    }
+  
+    
+    const [showAlert,setAlert] = useState(false);
+    const [email,setEmail ] = useState('');     
+    const [firstName,setFirstName] = useState('');
+    const  [lastName,setLastName] = useState('');
+    const [credential,setCredential] = useState(localStorage.getItem('googleCredentials'));
+    const [password,setPassword] = useState('');
+
+
+    
     return (
       <div class="bg-white shadow md:w-[20%]  rounded-lg divide-y divide-gray-200 border-blue-500 border-2">
-    
+    {showAlert ? <div class="alert alert-success shadow-lg">
+  <div>
+    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    <span>Your profile has been created!</span>
+  </div>
+</div>:<a></a>}
+{error?<div class="alert alert-error shadow-lg">
+  <div>
+   
+    <span>Error!
+<br>
+</br>
+Make Sure:
+<li>All fields are filled</li>
+<li>email is not already in use</li>
+
+    </span>
+  </div>
+</div>:<a></a>}
       <div class="px-5 py-7">
         <label class="font-semibold text-sm text-gray-600 pb-1 block">First Name</label>
-        <input type="text" class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full" />
+        <input type="text" class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"   onChange={(e)=>setFirstName(e.target.value)} />
         <label class="font-semibold text-sm text-gray-600 pb-1 block">Last Name</label>
-        <input type="text" class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full" />
-        <label class="font-semibold text-sm text-gray-400 pb-1 block">Email</label>
-        <input type="text" placeholder="You can't touch this" class="input input-bordered w-full max-w-xs" disabled />
-        <button type="button" class="transition duration-200 bg-blue-500 hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">
+        <input type="text" class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"  onChange={ (e)=>setLastName(e.target.value)}  />
+        <label class="font-semibold text-sm text-gray-600 pb-1 block">Email</label> 
+        <input type="email" placeholder='youremail@gmail.com' class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"  onChange={ (e)=>setEmail(e.target.value)}  />
+       
+       
+        <button type="button"  onClick={createUser}  class="transition duration-200 bg-blue-500  hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">
+          
             <span class="inline-block mr-2">Create Your Account </span>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 inline-block">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -55,10 +130,10 @@ function SignIn() {
      
      <div class="px-5 py-7">
        <label class="font-semibold text-sm text-gray-600 pb-1 block">E-mail</label>
-       <input type="text" class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full" />
+       <input type="text" class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full" onChange={(e)=>setEmail(e.target.value)} />
        <label clas s="font-semibold text-sm text-gray-600 pb-1 block">Password</label>
-       <input type="text" class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full" />
-       <button type="button" class="transition duration-200 bg-blue-500 hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">
+       <input type="password" class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full" onChange={(e)=>setPassword(e.target.value)} />
+       <button type="button" onClick={loginMechanism} class="transition duration-200 bg-blue-500 hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">
            <span class="inline-block mr-2">Login</span>
            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 inline-block">
                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -68,8 +143,9 @@ function SignIn() {
      <div class="p-5">
          <div class="grid grid-cols-3 gap-1 ">
            
-             <GoogleOAuthProvider clientId="236836718639-hol81mpdksfikn4354praeabvvst4tp4.apps.googleusercontent.com">
+             <GoogleOAuthProvider clientId="236836718639-hol81mpdksfikn4354praeabvvst4tp4.apps.googleusercontent.com" scopes='email'>
 <GoogleLogin
+scopes='email'
 onSuccess={credentialResponse => {
  
  axios.post('http://localhost:5000/checkIfUser',{
@@ -78,7 +154,7 @@ onSuccess={credentialResponse => {
  }).then((response)=>{
    console.log('axios response',response)
    if(response.data.error=='sad'){
-     setgoogleLanding(true);
+     setgoogleLanding(true);  
      localStorage.setItem('googleCredentials',credentialResponse.credential)
    }
    

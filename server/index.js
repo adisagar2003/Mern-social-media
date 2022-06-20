@@ -22,7 +22,9 @@ server.use(session({
     secret:'secret',
     resave:false,
     saveUninitialized:false,
-    store:store
+    store:store,
+    username:'',
+
     
 }))
 server.use(bodyParser.json())
@@ -33,7 +35,7 @@ console.log('Database connected, PORT',PORT);
 
 })
 server.get('/',(req,res)=>{
-    req.session.isAuth = true;
+
     res.send('Server ');
 })
 server.listen(5000,()=>{
@@ -42,6 +44,7 @@ server.listen(5000,()=>{
 
 const  isAuth =  (req,res,next)=>{
     if (req.session.isAuth){
+
         next()
     }
     else{
@@ -86,7 +89,27 @@ server.post('/checkIfUser',(req,res)=>{
     })
 })
 
+server.post('/signIn',(req,res)=>{
+    userModel.findOne({email:req.body.email,password:req.body.password}).then((response)=>{
+       console.log(response)
+       if (response==null){
+        console.log('null....failed login')
+        res.json({
+            err:'error'
+        })
+       }
+       else{
+res.json(response)
 
+req.session.isAuth = true;
+req.session.username = response.data
+
+
+
+       }
+
+    })
+})
 
 
 // User auth client
