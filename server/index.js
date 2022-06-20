@@ -6,7 +6,8 @@ const server = express();
 const userModel = require('./models/userSchema')
 const {OAuth2Client}  = require('google-auth-library');
 const client =  new OAuth2Client("236836718639-hol81mpdksfikn4354praeabvvst4tp4.apps.googleusercontent.com")
-
+var bodyParser = require('body-parser');
+server.use(bodyParser.json())
 mongoose.connect(CONNECTION_URL,{useNewUrlParser:true,useUnifiedTopology:true}).then(()=>{
 console.log('Database connected, PORT',PORT);
 }).catch((err)=>{
@@ -26,4 +27,22 @@ server.post('/addUserToDataBase',(req,res)=>{
         console.log('Error detected,code rejected')
     })
     res.send('BC');
+
 })
+server.post('/checkIfUser',(req,res)=>{
+    console.log(req.body.credentail ,'req body')
+    userModel.findOne({credential:req.body.credentail}).then((result)=>{
+        if (result==null){
+            console.log(result,"WE FOUND IT <333")
+        }
+        else{
+            console.log('found',result)
+        }
+
+
+    }).catch((err)=>{
+        console.log('</3 NOOOOOOOOOO',err)
+    })
+})
+
+
