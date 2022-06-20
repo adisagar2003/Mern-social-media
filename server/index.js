@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const CONNECTION_URL  ='mongodb+srv://adi:sahara123@cluster0.drtgg.mongodb.net/?retryWrites=true&w=majority'
 const PORT = process.env.PORT ||5000
@@ -8,6 +9,7 @@ const {OAuth2Client}  = require('google-auth-library');
 const client =  new OAuth2Client("236836718639-hol81mpdksfikn4354praeabvvst4tp4.apps.googleusercontent.com")
 var bodyParser = require('body-parser');
 server.use(bodyParser.json())
+server.use(cors())
 mongoose.connect(CONNECTION_URL,{useNewUrlParser:true,useUnifiedTopology:true}).then(()=>{
 console.log('Database connected, PORT',PORT);
 }).catch((err)=>{
@@ -33,10 +35,16 @@ server.post('/checkIfUser',(req,res)=>{
     console.log(req.body.credentail ,'req body')
     userModel.findOne({credential:req.body.credentail}).then((result)=>{
         if (result==null){
-            console.log(result,"WE FOUND IT <333")
+
+            console.log(result,"It was null lol ");
+            res.json({
+                error:'sad'
+            })
+        
         }
         else{
-            console.log('found',result)
+            console.log('found the thing',result);
+            res.json(result)
         }
 
 
