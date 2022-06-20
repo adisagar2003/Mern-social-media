@@ -4,22 +4,26 @@ const userSchema = mongoose.Schema({
     lastName:String,
     email:{
         type:String,
-        unique:true
+        unique:true,
+        required: true
     },
     lastSeen:{
         type:Date,
-        default: new Date()
+        default: new Date(),
+        required: true
     },
 
     likeCount:{
         type:Number,
-        default:0
+        default:0,
+        required: true
     }
     
 ,
     credential:{
         type:String,
-        unique: true
+        unique: true,
+        required: true
     }
 
 })

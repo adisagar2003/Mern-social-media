@@ -4,10 +4,27 @@ const mongoose = require('mongoose');
 const CONNECTION_URL  ='mongodb+srv://adi:sahara123@cluster0.drtgg.mongodb.net/?retryWrites=true&w=majority'
 const PORT = process.env.PORT ||5000
 const server = express();
+
 const userModel = require('./models/userSchema')
 const {OAuth2Client}  = require('google-auth-library');
 const client =  new OAuth2Client("236836718639-hol81mpdksfikn4354praeabvvst4tp4.apps.googleusercontent.com")
 var bodyParser = require('body-parser');
+const session = require('express-session');
+const { collection } = require('./models/userSchema');
+const MongoDBSession = require('connect-mongodb-session')(session);
+
+const store = new MongoDBSession({
+    uri:"mongodb+srv://adi:sahara123@cluster0.drtgg.mongodb.net/?retryWrites=true&w=majority",
+    collection:"mySessions",
+
+})
+server.use(session({
+    secret:'secret',
+    resave:false,
+    saveUninitialized:false,
+    store:store
+    
+}))
 server.use(bodyParser.json())
 server.use(cors())
 mongoose.connect(CONNECTION_URL,{useNewUrlParser:true,useUnifiedTopology:true}).then(()=>{
@@ -16,19 +33,35 @@ console.log('Database connected, PORT',PORT);
 
 })
 server.get('/',(req,res)=>{
+    req.session.isAuth = true;
     res.send('Server ');
 })
 server.listen(5000,()=>{
     console.log('I dont wanna do this')
 })
 
+const  isAuth =  (req,res,next)=>{
+    if (req.session.isAuth){
+        next()
+    }
+    else{
+        res.json({no:'no'})
+    }
+}
 server.post('/addUserToDataBase',(req,res)=>{
-    userModel.create({email:'johnteachescode@gmail.com',firstName:"John",lastName:"Doe",credential:'6969696969699696'}).then(()=>{
+
+    userModel.create(req.body).then(()=>{
         console.log('Well...worked')
-    }).catch(()=>{
-        console.log('Error detected,code rejected')
+        res.json(req.body)
+    }).catch((err)=>{
+        console.log('Error detected,code rejected');
+        res.json({
+            error:err
+        })
     })
-    res.send('BC');
+  
+
+
 
 })
 server.post('/checkIfUser',(req,res)=>{
@@ -54,3 +87,6 @@ server.post('/checkIfUser',(req,res)=>{
 })
 
 
+
+
+// User auth client
