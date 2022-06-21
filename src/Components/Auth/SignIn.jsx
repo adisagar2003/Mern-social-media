@@ -4,8 +4,14 @@ import {GoogleOAuthProvider} from '@react-oauth/google';
 import axios from 'axios';
 
 
+axios.default.withCredentials = true;
+
+axios.get('http://localhost:5000').then((response)=>{
+  console.log(response);
+})
 
 function SignIn() {
+ 
   const [credFound,setCredFound] = useState(null);
   const [firstName,setFirstName] = useState('');
   const  [lastName,setLastName] = useState('');
@@ -15,6 +21,11 @@ function SignIn() {
   const [showAlert,setAlert] = useState(false);
   const [error,setError] = useState(false);
   const [password,setPassword] = useState('');
+  useEffect(()=>{
+    axios.get('http://localhost:5000/signIn').then((response)=>{
+      console.log(response)
+    })
+    },[])
   
   const loginMechanism = () =>{
     console.log('clicked')
@@ -22,8 +33,7 @@ function SignIn() {
       email:email,
       password:password
     }).then((response)=>{
-      console.log('I did it!')
-      console.log(response)
+      console.log(response);
     }).catch(()=>{
       console.log('err')
     })
