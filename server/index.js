@@ -13,6 +13,7 @@ var bodyParser = require('body-parser');
 const session = require('express-session');
 const { collection } = require('./models/userSchema');
 const MongoDBSession = require('connect-mongodb-session')(session);
+const crypto = require('crypto')
 
 const store = new MongoDBSession({
     uri:CONNECTION_URL,
@@ -51,9 +52,9 @@ console.log('Database connected, PORT',PORT);
 
 })
 server.get('/',(req,res)=>{
-    req.session.isAuth = true;
+ 
 
-    res.json(session);
+    res.json(req.session);
 })
 server.listen(5000,()=>{
     console.log('I dont wanna do this')
@@ -109,28 +110,21 @@ server.post('/checkIfUser',(req,res)=>{
 })
 
 server.post('/signIn',(req,res)=>{
-    userModel.findOne({email:req.body.email,password:req.body.password}).then((response)=>{
+    userModel.find({email:req.body.email,password:req.body.password}).then((response)=>{
        console.log(response,'This is my response')
-       if (response==null){
+       if (response==[]){
+    
         console.log('null....failed login')
         res.json({
             err:'error'
         })
        }
-       else{
-        req.session.username = response.firstName
-        
-req.session.isAuth = true;
-
-
-res.json(req.session);
-
-
-
-
-
-
-       }
+      else{
+        console.log('Login?');
+        req.session.data = response
+       console.log(req.session)
+       res.json({user:req.session})
+      }
 
     })
 
@@ -138,7 +132,7 @@ res.json(req.session);
 
 server.get('/signIn',(req,res)=>{
     if (req.session){
-    
+        console.log(req.session)
         res.json({isLoggedIn:true,user:req.session})
     }
     else{
@@ -147,3 +141,84 @@ server.get('/signIn',(req,res)=>{
 })
 
 // User auth client
+
+
+
+   //Register User
+   
+    server.post('/registerUser',(req,res)=>{
+    if (req.body.email&&req.body.firstName&&req.body.lastName&&req.body.password==req.body.confirmPassword){
+        userModel.create({
+            firstName:req.body.firstName,
+            lastName:req.body.lastName,
+            password:req.body.password,
+            email:req.body.email,
+            credential: Math.random()*1000000000000
+        }).then(()=>{
+            req.session.data = req.body
+            console.log('The user should be in the database now')
+            res.json({
+
+                user:req.session,
+                canLogin:true
+                
+            })
+        }).catch((err)=>{
+            console.log('error')
+           res.json({
+            error:'e'
+           })
+        })
+    
+    }
+
+    else{
+        
+    }
+        
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Testing ZONE ☢️☢️☢️☢️☢️☢️
+
+server.get('/testing',(req,res)=>{
+    userModel.find({email:req.body.email,password:req.body.password}).then((response)=>{
+       console.log(response,'This is my response')
+       if (response==[]){
+    
+        console.log('null....failed login')
+        res.json({
+            err:'error'
+        })
+       }
+      else{
+        console.log('Login?');
+        req.session.data = response
+       console.log(req.session)
+       res.json({user:req.session})
+      }
+
+    })
+
+})

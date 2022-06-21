@@ -6,6 +6,27 @@ import axios from 'axios';
 import  { useCookies } from "react-cookie";
 import { CookiesProvider } from "react-cookie";
 
+//Get cookie function
+function getCookie(name) {
+  var dc = document.cookie;
+  var prefix = name + "=";
+  var begin = dc.indexOf("; " + prefix);
+  if (begin == -1) {
+      begin = dc.indexOf(prefix);
+      if (begin != 0) return null;
+  }
+  else
+  {
+      begin += 2;
+      var end = document.cookie.indexOf(";", begin);
+      if (end == -1) {
+      end = dc.length;
+      }
+  }
+  return decodeURI(dc.substring(begin + prefix.length, end));
+}
+
+
 axios.default.withCredentials = true;
 
 
@@ -25,27 +46,38 @@ function SignIn() {
   const [error,setError] = useState(false);
   const [password,setPassword] = useState('');
   const [auth,setAuth] = useState(false);
-  
+
   useEffect(()=>{
     axios.get('http://localhost:5000/signIn').then((response)=>{
       if (response.data.isLoggedIn){
-        location.replace('http://localhost:3000/dashboard')
+        
       }
       console.log(response)
     
     })
     },[])
   
-  const loginMechanism = () =>{
+  const loginMechanism = async () =>{
     console.log('clicked')
-    axios.post('http://localhost:5000/signIn',{
+     axios.post('http://localhost:5000/signIn',{
       email:email,
       password:password
     }).then((response)=>{
+      
       console.log(response);
-      setCookie("user",response.data.cookie);
-      setAuth(true)
-      location.replace("http://localhost:5000/dashboard")
+      if (response=={err:'error'}){
+        console.log('error')
+        setAuth(false);
+        return (<h1>WTF MAN </h1>)
+      }
+      else{
+        console.log(response)
+        setCookie("user",response);
+        console.log(response,'This should be in the applications')
+        setAuth(true)
+        location.replace("http://localhost:3000/dashboard");
+        
+      }
     }).catch(()=>{
       console.log('err')
     })
