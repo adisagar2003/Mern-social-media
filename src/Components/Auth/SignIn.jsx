@@ -3,15 +3,18 @@ import { GoogleLogin } from '@react-oauth/google';
 import {GoogleOAuthProvider} from '@react-oauth/google';
 import axios from 'axios';
 
+import  { useCookies } from "react-cookie";
+import { CookiesProvider } from "react-cookie";
 
 axios.default.withCredentials = true;
+
 
 axios.get('http://localhost:5000').then((response)=>{
   console.log(response);
 })
 
 function SignIn() {
- 
+  const [cookies, setCookie] = useCookies(["user"]);
   const [credFound,setCredFound] = useState(null);
   const [firstName,setFirstName] = useState('');
   const  [lastName,setLastName] = useState('');
@@ -21,9 +24,15 @@ function SignIn() {
   const [showAlert,setAlert] = useState(false);
   const [error,setError] = useState(false);
   const [password,setPassword] = useState('');
+  const [auth,setAuth] = useState(false);
+  
   useEffect(()=>{
     axios.get('http://localhost:5000/signIn').then((response)=>{
+      if (response.data.isLoggedIn){
+        location.replace('http://localhost:3000/dashboard')
+      }
       console.log(response)
+    
     })
     },[])
   
@@ -34,6 +43,9 @@ function SignIn() {
       password:password
     }).then((response)=>{
       console.log(response);
+      setCookie("user",response.data.cookie);
+      setAuth(true)
+      location.replace("http://localhost:5000/dashboard")
     }).catch(()=>{
       console.log('err')
     })
@@ -44,6 +56,7 @@ function SignIn() {
 
   useEffect(()=>{
     console.log('credFound')
+
   },[credFound])
 
   const AfterGoogleAuth = () =>{

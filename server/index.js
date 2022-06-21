@@ -119,11 +119,11 @@ server.post('/signIn',(req,res)=>{
        }
        else{
         req.session.username = response.firstName
+        
 req.session.isAuth = true;
 
-console.log(req.session)
-console.log(req.session.isAuth)
-res.json(response)
+
+res.json(req.session);
 
 
 
@@ -137,8 +137,9 @@ res.json(response)
 })
 
 server.get('/signIn',(req,res)=>{
-    if (req.session.firstName){
-        res.json({isLoggedIn:true,user:req.session.firstName})
+    if (req.session){
+    
+        res.json({isLoggedIn:true,user:req.session})
     }
     else{
         res.json({isLoggedIn:false})
