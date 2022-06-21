@@ -46,11 +46,12 @@ function SignIn() {
   const [error,setError] = useState(false);
   const [password,setPassword] = useState('');
   const [auth,setAuth] = useState(false);
+  const  [cookiePresent,setCookiePresent] = useState(false);
 
   useEffect(()=>{
     axios.get('http://localhost:5000/signIn').then((response)=>{
       if (response.data.isLoggedIn){
-        
+        console.log('logged in')
       }
       console.log(response)
     
@@ -68,18 +69,34 @@ function SignIn() {
       if (response=={err:'error'}){
         console.log('error')
         setAuth(false);
-        return (<h1>WTF MAN </h1>)
+   
       }
       else{
         console.log(response)
-        setCookie("user",response);
-        console.log(response,'This should be in the applications')
-        setAuth(true)
-        location.replace("http://localhost:3000/dashboard");
+        console.log(response.data.user.data.length,'HardCoded data')
+        if (response.data.user.data.length!=0){
+          setCookie("user",response.data.user.data[0]);
+        
+          console.log(response,'This should be in the applications');
+        
+          location.assign('http://localhost:3000/dashboard');
+          setError(false);
+          showAlert(false);
+       
+        }
+        else{
+          setError(true)
+          showAlert(true)
+          console.log('DATA WAS EMPTY LIKE ME')
+        }
+       
+     
         
       }
     }).catch(()=>{
-      console.log('err')
+    
+      console.log('ERROR!')
+
     })
 
   }
@@ -91,83 +108,7 @@ function SignIn() {
 
   },[credFound])
 
-  const AfterGoogleAuth = () =>{
-
-    //
-    const createUser = () => {
-      axios.post('http://localhost:5000/addUserToDataBase',{
-        firstName:firstName,
-        lastName:lastName,
-        email:email,
-        credential:credential
-      }).then((response)=>{
-        if (response.data.error){
-      setError(true);
-          
-        }
-        else{
-          console.log(response)
-          setAlert(true);
-          setTimeout(()=>setAlert(false),3000)
-        }
-      
-      
   
-      })
-    }
-  
-    
-    const [showAlert,setAlert] = useState(false);
-    const [email,setEmail ] = useState('');     
-    const [firstName,setFirstName] = useState('');
-    const  [lastName,setLastName] = useState('');
-    const [credential,setCredential] = useState(localStorage.getItem('googleCredentials'));
-    const [password,setPassword] = useState('');
-
-
-    
-    return (
-      <div class="bg-white shadow md:w-[20%]  rounded-lg divide-y divide-gray-200 border-blue-500 border-2">
-    {showAlert ? <div class="alert alert-success shadow-lg">
-  <div>
-    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-    <span>Your profile has been created!</span>
-  </div>
-</div>:<a></a>}
-{error?<div class="alert alert-error shadow-lg">
-  <div>
-   
-    <span>Error!
-<br>
-</br>
-Make Sure:
-<li>All fields are filled</li>
-<li>email is not already in use</li>
-
-    </span>
-  </div>
-</div>:<a></a>}
-      <div class="px-5 py-7">
-        <label class="font-semibold text-sm text-gray-600 pb-1 block">First Name</label>
-        <input type="text" class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"   onChange={(e)=>setFirstName(e.target.value)} />
-        <label class="font-semibold text-sm text-gray-600 pb-1 block">Last Name</label>
-        <input type="text" class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"  onChange={ (e)=>setLastName(e.target.value)}  />
-        <label class="font-semibold text-sm text-gray-600 pb-1 block">Email</label> 
-        <input type="email" placeholder='youremail@gmail.com' class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"  onChange={ (e)=>setEmail(e.target.value)}  />
-       
-       
-        <button type="button"  onClick={createUser}  class="transition duration-200 bg-blue-500  hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">
-          
-            <span class="inline-block mr-2">Create Your Account </span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 inline-block">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-        </button>
-      </div>
-      </div>
-     
-    )
-  }
 
   return (
  
@@ -182,7 +123,12 @@ Make Sure:
  <div class="p-10 xs:p-0 mx-auto md:w-full md:max-w-md ">
    <h1 class="font-extrabold text-center text-2xl mb-5 bg-clip-text bg-gradient-to-r text-transparent from-purple-700  to-pink-100">Sign In</h1>  
    <div class="bg-white shadow w-full rounded-lg divide-y divide-gray-200 border-blue-500 border-2">
-     
+     {error?<div class="alert alert-warning shadow-lg">
+  <div>
+    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+    <span>Warning: Invalid email address!</span>
+  </div>
+</div>:<div></div>}
      <div class="px-5 py-7">
        <label class="font-semibold text-sm text-gray-600 pb-1 block">E-mail</label>
        <input type="text" class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full" onChange={(e)=>setEmail(e.target.value)} />
@@ -252,7 +198,7 @@ onError={() => {
                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 inline-block align-text-top">
                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                </svg>
-               <span class="inline-block ml-1">Back to homepage</span>
+               <span class="inline-block ml-1">{showAlert?<h1>aa</h1>:<h1>bb</h1>}Back to homepage</span>
            </button>
          </div>
        </div>

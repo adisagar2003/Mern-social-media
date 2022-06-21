@@ -1,27 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-
-function Register() {
-    const [firstName,setFirstName] = useState(null);
-    const [lastName,setLastName] = useState(null);
-    const [password,setPassword] = useState(null);
-    const [email,setEmail] = useState(null);
-    const [confirmPassword,setConfirmPassword] = useState(null);
-    const [showAlert,setShowAlert] = useState(false);
-//Alerts
-const BlueAlert = () =>{
-  return (
-    <div class="alert alert-success shadow-lg">
-  <div>
-    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-    <span>Your account has been registered!</span>
-  </div>
-</div>
-
-
-
-  )
-  const ErrorAlert = ()=>{
+const ErrorAlert = ()=>{
   return (
     <div class="alert alert-error shadow-lg">
   <div>
@@ -31,6 +10,31 @@ const BlueAlert = () =>{
 </div>
   )
   }
+function Register() {
+    const [firstName,setFirstName] = useState(null);
+    const [lastName,setLastName] = useState(null);
+    const [password,setPassword] = useState(null);
+    const [email,setEmail] = useState(null);
+    const [confirmPassword,setConfirmPassword] = useState(null);
+    const [showAlert,setShowAlert] = useState(false);
+    const [showSuccess,setShowSuccess] = useState(false);
+
+
+  
+//Alerts
+const BlueAlert = () =>{
+  return (
+    <div class="alert alert-success shadow-lg">
+  <div>
+    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    <span>Your account has been registered!<br></br> <a class='text-sm' href='/'>Login here</a></span>
+  </div>
+</div>
+
+
+
+  )
+ 
 }
 //Register User
 const registerUser = () =>{
@@ -43,14 +47,17 @@ const registerUser = () =>{
         lastName:lastName
     }).then((response)=>{
       console.log(response)
-      if (response){
-        console.log(response)
+      if (response.data.error){
+        setShowAlert(true)
         console.log('Error!')
-        return (<ErrorAlert />)
+     
 
       }
       else{
-       console.log('No response')
+      console.log('response',response);
+      setShowAlert(false);
+      setShowSuccess(true);
+      
       }
     }).catch((err)=>{
 console.log(err)
@@ -64,6 +71,8 @@ console.log(err)
  
 
 <div class="p-10 xs:p-0 mx-auto md:w-full md:max-w-md ">
+  {showAlert?<ErrorAlert />:<a></a>}
+  {showSuccess?<BlueAlert />:<a></a>}
  <h1 class="font-extrabold text-center text-2xl mb-5 bg-clip-text bg-gradient-to-r text-transparent from-purple-700  to-pink-100">Register</h1>  
  <div class="bg-white shadow w-full rounded-lg divide-y divide-gray-200 border-blue-500 border-2">
    

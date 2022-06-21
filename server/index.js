@@ -53,8 +53,8 @@ console.log('Database connected, PORT',PORT);
 })
 server.get('/',(req,res)=>{
  
-
-    res.json(req.session);
+    
+    res.json({});
 })
 server.listen(5000,()=>{
     console.log('I dont wanna do this')
@@ -133,7 +133,7 @@ server.post('/signIn',(req,res)=>{
 server.get('/signIn',(req,res)=>{
     if (req.session){
         console.log(req.session)
-        res.json({isLoggedIn:true,user:req.session})
+        res.json({isLoggedIn:false,user:req.session})
     }
     else{
         res.json({isLoggedIn:false})
@@ -173,7 +173,7 @@ server.get('/signIn',(req,res)=>{
     }
 
     else{
-        
+        res.json({error:'e'})
     }
         
     })
