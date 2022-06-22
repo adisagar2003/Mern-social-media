@@ -13,7 +13,9 @@ var bodyParser = require('body-parser');
 const session = require('express-session');
 const { collection } = require('./models/userSchema');
 const MongoDBSession = require('connect-mongodb-session')(session);
-const crypto = require('crypto')
+const crypto = require('crypto');
+const postModel = require('./models/postSchema');
+const { response } = require('express');
 
 const store = new MongoDBSession({
     uri:CONNECTION_URL,
@@ -57,7 +59,7 @@ server.get('/',(req,res)=>{
     res.json({});
 })
 server.listen(5000,()=>{
-    console.log('I dont wanna do this')
+    console.log('I wanna do this')
 })
 server.use(cookieParser())
 
@@ -180,6 +182,36 @@ server.get('/signIn',(req,res)=>{
 
 
 
+
+//Post handling 📤📤📤📤
+
+server.post('/createPost',(req,res)=>{
+    postModel.create({
+        name:req.body.name,
+        description:req.body.description,
+        imageSource:req.body.imageSource
+    
+
+    }).then(()=>{
+        res.json({
+            user:'created'
+        })
+    
+    }).catch(()=>{
+        console.log('check')
+    })
+   
+})
+
+server.get('/getPosts',(req,res)=>{
+   const data= postModel.find({}).then((response)=>{
+
+    res.json({
+        ourResponse:response
+    })
+   })
+   console.log(data)
+})
 
 
 
