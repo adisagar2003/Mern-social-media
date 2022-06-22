@@ -5,15 +5,16 @@ import { CookiesProvider } from 'react-cookie'
 function Dashboard() {
   const [cookie,setCookie] = useState(decodeURIComponent(document.cookie));
   const [cookieObject,setCookieObject]  = useState(null);
-  const [allData,setAllData] = useState([]);
+  const [allData,setAllData] = useState(null);
   const [isLoading,setLoading]  = useState(true);
- useEffect(()=>{
-  axios.get(' http://localhost:5000/getPosts').then((response)=>{
-    setAllData(response.data.ourResponse);
-    console.log(response.data.ourResponse,'ourRes')
-    setLoading(false);
+  useEffect(()=>{
+    axios.get('http://localhost:5000/getPosts').then((response)=>{
+      setAllData(response);
+  
     })
- },[])
+  },[])
+ console.log(allData.data.ourResponse)
+ 
   const PostData = (props) =>{
     return (
       <div class="md:mt-[3%]  mt-[20%] md:ml-[10%]">
@@ -72,17 +73,16 @@ console.log(cookieObj)
 
 <span class="font-extrabold text-center text-2xl mb-5 bg-clip-text bg-gradient-to-r text-transparent from-purple-700  to-pink-400 relative md:top-1 top-5 md:left-10 right-5" >Latest Posts</span>
 
-{allData.map((data)=>{
-  
-  <PostData  />
+{allData.data.ourResponse.map((data)=>{
+  return(
+    <PostData name={data.name} description={data.description} imageSource={data.imageSource} dateCreated={data.dateCreated}/>
+  )
 })}
-<PostData />
 
       </div>
     
- 
 
-   
+
 
     </div>
     
