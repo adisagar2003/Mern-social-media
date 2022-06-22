@@ -9,6 +9,7 @@ import { BrowserRouter,Routes,Route } from 'react-router-dom';
 import { CookiesProvider } from "react-cookie";
 import Dashboard from './Components/Dashboard';
 import Register from './Components/Auth/Register';
+import CreatePost from './Components/Posts/CreatePost';
 
 
 function App() {
@@ -27,6 +28,7 @@ const responseGoogle =async (res)=>{
 <Route path='/dashboard' element ={<Dashboard />} />
 <Route path='/' element={<SignIn />} />
 <Route path='/register' element={<Register />} />
+<Route path='/createPost' element={<CreatePost />} />
 </Routes>
 
 </BrowserRouter>
