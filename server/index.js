@@ -17,11 +17,14 @@ const crypto = require('crypto');
 const postModel = require('./models/postSchema');
 const { response } = require('express');
 
+
 const store = new MongoDBSession({
     uri:CONNECTION_URL,
     collection:"mySession",
 
 })
+server.use(express.json({limit: '50mb'}));
+server.use(express.urlencoded({limit: '50mb'}));
 server.use(session({
     key:"userID",
     secret:'secret',
@@ -194,7 +197,7 @@ server.post('/createPost',(req,res)=>{
 
     }).then(()=>{
         res.json({
-            user:'created'
+            post:'created'
         })
     
     }).catch(()=>{

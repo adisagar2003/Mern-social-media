@@ -14,8 +14,9 @@ const postSchema = mongoose.Schema({
         default: new Date()
     },
     imageSource:{
-        type:String,
-        default: 'https://random.imagecdn.app/1280/720'
+        type:Buffer,
+        default: 'https://random.imagecdn.app/1280/720',
+        required:true
     }
 
 

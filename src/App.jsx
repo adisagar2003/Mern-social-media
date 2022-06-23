@@ -10,6 +10,7 @@ import { CookiesProvider } from "react-cookie";
 import Dashboard from './Components/Dashboard';
 import Register from './Components/Auth/Register';
 import CreatePost from './Components/Posts/CreatePost';
+import Home from './Components/Home/Home';
 
 
 function App() {
@@ -26,7 +27,9 @@ const responseGoogle =async (res)=>{
 <BrowserRouter >
 <Routes>
 <Route path='/dashboard' element ={<Dashboard />} />
-<Route path='/' element={<SignIn />} />
+<Route path='/' element={<Home />} />
+<Route path='/signIn' element={<SignIn />} />
+
 <Route path='/register' element={<Register />} />
 <Route path='/createPost' element={<CreatePost />} />
 </Routes>
