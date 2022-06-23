@@ -11,6 +11,7 @@ import Dashboard from './Components/Dashboard';
 import Register from './Components/Auth/Register';
 import CreatePost from './Components/Posts/CreatePost';
 import Home from './Components/Home/Home';
+import Navbar from './Components/Navbar/Navbar';
 
 
 function App() {
@@ -25,7 +26,9 @@ const responseGoogle =async (res)=>{
     <div className="App">
       <CookiesProvider >
 <BrowserRouter >
+<Navbar />
 <Routes>
+
 <Route path='/dashboard' element ={<Dashboard />} />
 <Route path='/' element={<Home />} />
 <Route path='/signIn' element={<SignIn />} />
