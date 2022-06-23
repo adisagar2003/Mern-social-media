@@ -4,7 +4,7 @@ function Navbar() {
   return (
 <nav class='p-3 '>
     <Link to='/' >
-<a><span class='text transparent bg-gradient-to-b  from-orange-500 to-purple-500 bg-clip-text text-transparent font-bold pl-4'>Logo </span></a></Link>
+<a><span class='text transparent bg-gradient-to-b text-2xl from-orange-500 to-purple-500 bg-clip-text text-transparent font-extrabold pl-4'>Chat App</span></a></Link>
 
 <div class='font-bold text-slate-500 text-sm float-right flex gap-5 '>
 
