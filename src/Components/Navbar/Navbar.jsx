@@ -9,7 +9,7 @@ function Navbar() {
 <div class='font-bold text-slate-500 text-sm float-right flex gap-5 '>
 
 
-<Link to='/'><a class='hover:text-gray-600 '>User</a></Link>
+<Link to='/createPost'><a class='hover:text-gray-600 '>Create</a></Link>
 <Link to='/signIn'><a class='hover:text-gray-600 '>Sign-in</a></Link>
 
 <Link to='/dashboard'><a class='hover:text-gray-600 '>Dashboard</a></Link>

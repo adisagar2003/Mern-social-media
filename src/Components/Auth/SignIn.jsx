@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { GoogleLogin } from '@react-oauth/google';
 import {GoogleOAuthProvider} from '@react-oauth/google';
 import axios from 'axios';
-
+import {Link } from 'react-router-dom';
 import  { useCookies } from "react-cookie";
 import { CookiesProvider } from "react-cookie";
 
@@ -144,30 +144,9 @@ function SignIn() {
      <div class="p-5">
          <div class="grid grid-cols-3 gap-1 ">
            
-             <GoogleOAuthProvider clientId="236836718639-hol81mpdksfikn4354praeabvvst4tp4.apps.googleusercontent.com" scopes='email'>
-<GoogleLogin
-scopes='email'
-onSuccess={credentialResponse => {
- 
- axios.post('http://localhost:5000/checkIfUser',{
-   credentail:credentialResponse.credential
 
- }).then((response)=>{
-   console.log('axios response',response)
-   if(response.data.error=='sad'){
-     setgoogleLanding(true);  
-     localStorage.setItem('googleCredentials',credentialResponse.credential)
-   }
-   
- })
- console.log(credentialResponse);
-}}
-onError={() => {
- console.log('Login Failed');
-}}
-/>;
-</GoogleOAuthProvider>;
-             <button type="button" class="transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal text-center inline-block">Github</button>
+
+  
          </div>
      </div>
        <div class="py-5">
@@ -177,7 +156,7 @@ onError={() => {
                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 inline-block align-text-top">
                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
                </svg>
-               <span class="inline-block ml-1">Forgot Password</span>
+           
            </button>
          </div>
          <div class="text-center sm:text-right whitespace-nowrap">
@@ -194,12 +173,12 @@ onError={() => {
    <div class="py-5">
        <div class="grid grid-cols-2 gap-1">
          <div class="text-center sm:text-left whitespace-nowrap">
-           <button class="transition duration-200 mx-5 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-200 focus:outline-none focus:bg-gray-300 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
+  <Link to='/'>       <button class="transition duration-200 mx-5 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-200 focus:outline-none focus:bg-gray-300 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 inline-block align-text-top">
                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                </svg>
-               <span class="inline-block ml-1">{showAlert?<h1>aa</h1>:<h1>bb</h1>}Back to homepage</span>
-           </button>
+               <span class="inline-block ml-1">Back to homepage</span>
+           </button></Link>   
          </div>
        </div>
      </div>

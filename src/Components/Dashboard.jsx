@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { CookiesProvider } from 'react-cookie'
 import { PropagateLoader } from 'react-spinners';
+import { imageToBase64, base64ToImage } from "base64-2-img";
+
 function Dashboard() {
   const [cookie, setCookie] = useState(decodeURIComponent(document.cookie));
   const [cookieObject, setCookieObject] = useState(null);
@@ -61,7 +63,7 @@ console.log('CANNOT FETCH DATA BOO HOO')
         <div class='h-[35vh] p-10 text-slate-500 bg-slate-100 w-[80%] ml-[10%] rounded-xl shadow-2xl hover:shadow-xl transition-all'>
           <div class='float-right rounded-full md:w-[20vh] w-[10vh] md:h-[20vh] h-[10vh] shadow-2xl overflow-clip'>
             <img src='https://random.imagecdn.app/1280/720' class='scale-20 translate-y-6' />
-
+        
           </div>
           <span class="font-extrabold text-center text-2xl mb-5 bg-clip-text bg-gradient-to-r text-transparent from-purple-700  to-pink-400 relative md:top-1 top-5 md:left-10 right-5" >{cookieObj.firstName} {cookieObj.lastName}</span>
           <div class="md:mt-[3%] mt-[20%] md:ml-[10%]">
@@ -87,14 +89,17 @@ console.log('CANNOT FETCH DATA BOO HOO')
   <div class='md:h-[30vh] md:p-[10vh] p-[1vh] h-[14vh] bg-slate-300 rounded-xl  transition-all'>
  <span class=' font-bold bg-clip-text bg-gradient-to-r text-transparent from bg-purple-500 to bg-red-500'>{data.name}</span> 
  <div class='flex flex-row float-right'>
-<img class='mr-[40vh]' src={data.imageSource} height={200} width={200} />
+ <img src={`data:image/jpeg;base64,${data.imageSource.data}`} height={200} width={200} />
+
  <div class='float-right font-semibold'>
   {data.description}
+  {console.log(data.imageSource.data)}
   </div>
   </div>
   </div>)
 })}
 </div>
+
       </div>
 
 
