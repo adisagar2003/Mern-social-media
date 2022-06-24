@@ -8,6 +8,7 @@ const [cookieObject,setCookieObject] = useState({})
     const [imageValue,setImageValue] = useState(null);
     const [showError,setError] = useState(false);
     const [showSuccess,setSuccess] = useState(false);
+    const [checkUser,setCheck] = useState(null);
 useEffect(()=>{
   setCookieObject(JSON.parse(cookie))
 },[])
@@ -18,7 +19,7 @@ useEffect(()=>{
         axios.post('http://localhost:5000/createPost',{
             name:cookieObject.firstName,
             description:description,
-            imageSource:imageValue
+           
         }).then((response)=>{
             console.log(response);
             setError(false);
@@ -50,16 +51,8 @@ useEffect(()=>{
   </div>
 </div>:<a></a>}
            <label class='bg-clip-text text-transparent bg-gradient-to-t from-purple-500 to-pink-500 font-bold text-xl'>Description</label>
-           <FileBase64 
-        multiple={ false }
-        onDone={({base64})=>setImageValue(base64)}
-        />
- 
-            <input type="text" onChange={(e)=>setDescription(e.target.value)} class=' md:p-5 text-slate-500 font-semibold text-xl md:w-[50vh] rounded-xl shadow-2xl' />
-            
         
-            
-       
+            <input type="text" onChange={(e)=>setDescription(e.target.value)} class=' md:p-5 text-slate-500 font-semibold text-xl md:w-[50vh] rounded-xl shadow-2xl' />
             <button class='bg-red-400 mt-10 hover:bg-red-100 transition-all hover:text-slate-900 p-4 font-bold  ' onClick={submitData}>Submit</button>
         
         </div>

@@ -9,6 +9,7 @@ function Dashboard() {
   const [cookieObject, setCookieObject] = useState(null);
   const [allData, setAllData] = useState(null);
   const [isLoading, setLoading] = useState(true);
+  const [likeCount,setLikeCount] = useState(null);
  
   
   
@@ -24,9 +25,7 @@ function Dashboard() {
             date created:{props.dateCreated}
           </div>
           <span class='font-bold'>{props.name}</span>
-          <div class='float-right  md:w-60 w-20 rounded-xl'>
-            <img class='rounded-xl scale-100 shadow-2xl' src={props.imageSource}></img>
-          </div>
+     
           <span class='ml-[2%]'>{props.description}</span>
 
 
@@ -86,7 +85,7 @@ function Dashboard() {
   <div class='md:h-[30vh] md:p-[10vh] p-[1vh] h-[14vh] bg-slate-300 rounded-xl  transition-all'>
  <span class=' font-bold bg-clip-text bg-gradient-to-r text-transparent from bg-purple-500 to bg-red-500'>{data.name}</span> 
  <div class='flex flex-row float-right'>
- <img src={`data:image/jpeg;base64,${data.imageSource.data}`} height={200} width={200} />
+
 
  <div class='float-right font-semibold'>
   {data.description}
