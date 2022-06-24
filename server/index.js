@@ -5,7 +5,7 @@ const CONNECTION_URL  ='mongodb+srv://adi:sahara123@cluster0.drtgg.mongodb.net/?
 const PORT = process.env.PORT ||5000
 const server = express();
 const cookieParser = require('cookie-parser');
-
+const multer = require('multer');
 const userModel = require('./models/userSchema')
 const {OAuth2Client}  = require('google-auth-library');
 const client =  new OAuth2Client("236836718639-hol81mpdksfikn4354praeabvvst4tp4.apps.googleusercontent.com")
@@ -16,6 +16,19 @@ const MongoDBSession = require('connect-mongodb-session')(session);
 const crypto = require('crypto');
 const postModel = require('./models/postSchema');
 const { response } = require('express');
+
+const fileStorageEngine = multer.diskStorage({
+    destination:(req,file,cb)=>{
+        cb(null,'./images')
+    },
+    filename:(req,file,cb)=>{
+            cb(null,Date.now()+"--"+file.originalname);
+    }
+})
+const upload = multer({
+    storage:fileStorageEngine
+})
+
 
 
 const store = new MongoDBSession({
@@ -188,11 +201,12 @@ server.get('/signIn',(req,res)=>{
 
 //Post handling 📤📤📤📤
 
-server.post('/createPost',(req,res)=>{
+server.post('/createPost',upload.single("image"),(req,res)=>{
+    console.log(req.file);
     postModel.create({
         name:req.body.name,
         description:req.body.description,
-        imageSource:req.body.imageSource
+        imageSource:req.file
     
 
     }).then(()=>{

@@ -46,7 +46,7 @@ useEffect(()=>{
 {showSuccess?<div class="alert alert-success shadow-lg">
   <div>
     <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-    <span>Your purchase has been confirmed!</span>
+    <span>Your post is created!</span>
   </div>
 </div>:<a></a>}
            <label class='bg-clip-text text-transparent bg-gradient-to-t from-purple-500 to-pink-500 font-bold text-xl'>Description</label>
@@ -60,7 +60,7 @@ useEffect(()=>{
         
             
        
-            <button class='bg-red-400 mt-10 hover:bg-red-100 transition-all hover:text-slate-900  ' onClick={submitData}>Submit</button>
+            <button class='bg-red-400 mt-10 hover:bg-red-100 transition-all hover:text-slate-900 p-4 font-bold  ' onClick={submitData}>Submit</button>
         
         </div>
         

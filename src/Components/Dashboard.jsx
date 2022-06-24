@@ -9,19 +9,9 @@ function Dashboard() {
   const [cookieObject, setCookieObject] = useState(null);
   const [allData, setAllData] = useState(null);
   const [isLoading, setLoading] = useState(true);
-  useEffect(() => {
  
-    
-    axios.get('http://localhost:5000/getPosts').then((response) => {
-      console.log(response.data.ourResponse,'This should appear')
-      setAllData(response.data.ourResponse);
-    console.log('the data is set, ready to go!');
-    setLoading(false);
   
-    
-  }).catch(()=>{
-console.log('CANNOT FETCH DATA BOO HOO')
-  })},[])
+  
 
 
 
@@ -53,6 +43,13 @@ console.log('CANNOT FETCH DATA BOO HOO')
   let cookieObj = JSON.parse(newCookie);
   console.log(cookieObj)
 
+  useEffect(()=>{
+    axios.get('http://localhost:5000/getPosts').then((response) => {
+      console.log(response.data.ourResponse,'This should appear')
+      setAllData(response.data.ourResponse);
+    console.log('the data is set, ready to go!');
+    setLoading(false)})
+  },[])
 
 
   return (
@@ -93,7 +90,7 @@ console.log('CANNOT FETCH DATA BOO HOO')
 
  <div class='float-right font-semibold'>
   {data.description}
-  {console.log(data.imageSource.data)}
+
   </div>
   </div>
   </div>)
