@@ -87,8 +87,8 @@ function SignIn() {
           setCookie("user",response.data.user.data[0]);
         
           console.log(response,'This should be in the applications');
+          location.assign('/dashboard');
           
-          location.assign('http://localhost:3000/dashboard');
           setError(false);
           showAlert(false);
        

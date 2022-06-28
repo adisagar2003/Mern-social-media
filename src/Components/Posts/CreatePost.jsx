@@ -1,7 +1,14 @@
 import axios from 'axios';
 import React,{useEffect, useState} from 'react'
 import FileBase64 from 'react-file-base64';
-function CreatePost() {
+import {connect} from 'react-redux';
+function mapStateToProps(state){
+  return{
+      logged:state
+  }
+
+}
+function CreatePost(props) {
     const [isLoggedIn,setLoggedIn] = useState(false);
     const [cookie,setCookie] = useState(decodeURIComponent(document.cookie).split('=')[1]);
     const [cookieObject,setCookieObject] = useState({})

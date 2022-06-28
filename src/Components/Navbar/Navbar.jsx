@@ -14,17 +14,17 @@ function Navbar(props) {
     
 <nav class='p-3 '>
   {console.log(store.getState(),'Navbar getstate function')}
-  {console.log(props.logged,'Hoping this works')}
+  {console.log(props.logged.isLogged,'Hoping this works')}
     <Link to='/' >
 <a><span class='text transparent bg-gradient-to-b text-2xl from-orange-500 to-purple-500 bg-clip-text text-transparent font-extrabold pl-4'>Chat App</span></a></Link>
 
 <div class='font-bold text-slate-500 text-sm float-right flex gap-5 '>
 
 
-<Link to='/createPost'><a class='hover:text-gray-600 '>Create/login required</a></Link>
+<Link to='/createPost'><a class='hover:text-gray-600 '>{props.logged.isLogged?<span>Create</span>:<span class=''></span>}</a></Link>
 <Link to='/signIn'><a class='hover:text-gray-600 '>Sign-in</a></Link>
 
-<Link to='/dashboard'><a class='hover:text-gray-600 '>Dashboard/login required</a></Link>
+<Link to='/dashboard'><a class='hover:text-gray-600 '>{props.logged.isLogged?<span>Dashboard</span>:<span class=''></span>}</a></Link>
 
 
 </div>

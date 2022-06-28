@@ -4,13 +4,8 @@ import { CookiesProvider } from 'react-cookie'
 import { PropagateLoader } from 'react-spinners';
 import { imageToBase64, base64ToImage } from "base64-2-img";
 import store from '../store';
+import { connect } from 'react-redux';
 
-function mapStateToProps(state){
-  return{
-      logged:state
-  }
-
-}
 function Dashboard(props) {
 
   const [cookie, setCookie] = useState(decodeURIComponent(document.cookie));
@@ -18,11 +13,13 @@ function Dashboard(props) {
   const [allData, setAllData] = useState(null);
   const [isLoading, setLoading] = useState(true);
   const [likeCount,setLikeCount] = useState(null);
+useEffect(()=>{
   if (localStorage.getItem('DISPATCHWORK')){
     store.dispatch({type:'login_user'});
     console.log(store.getState(),'The user which is....')
   }
   
+},[isLoading])
  
   
   
@@ -120,4 +117,4 @@ function Dashboard(props) {
   )
 }
 
-export default Dashboard
+export default Dashboard;
