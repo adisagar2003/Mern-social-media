@@ -5,9 +5,11 @@ import axios from 'axios';
 import {Link } from 'react-router-dom';
 import  { useCookies } from "react-cookie";
 import { CookiesProvider } from "react-cookie";
+import store from '../../store';
 
 //Get cookie function
 function getCookie(name) {
+
   var dc = document.cookie;
   var prefix = name + "=";
   var begin = dc.indexOf("; " + prefix);
@@ -35,6 +37,9 @@ axios.get('http://localhost:5000').then((response)=>{
 })
 
 function SignIn() {
+
+
+  console.log(store.getState(),'REDUX DATA')
   const [cookies, setCookie] = useCookies(["user"]);
   const [credFound,setCredFound] = useState(null);
   const [firstName,setFirstName] = useState('');
@@ -75,10 +80,14 @@ function SignIn() {
         console.log(response)
         console.log(response.data.user.data.length,'HardCoded data')
         if (response.data.user.data.length!=0){
+
+         
+          store.dispatch({type:'login_user'})
+          localStorage.setItem('DISPATCHWORK',store.getState().isLogged)
           setCookie("user",response.data.user.data[0]);
         
           console.log(response,'This should be in the applications');
-        
+          
           location.assign('http://localhost:3000/dashboard');
           setError(false);
           showAlert(false);

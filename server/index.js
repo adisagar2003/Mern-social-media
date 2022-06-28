@@ -1,4 +1,6 @@
 const express = require('express');
+const http = require('http');
+const {Server} = require('socket.io');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const CONNECTION_URL  ='mongodb+srv://adi:sahara123@cluster0.drtgg.mongodb.net/?retryWrites=true&w=majority'
@@ -17,6 +19,7 @@ const crypto = require('crypto');
 const postModel = require('./models/postSchema');
 const { response } = require('express');
 
+
 const fileStorageEngine = multer.diskStorage({
     destination:(req,file,cb)=>{
         cb(null,'./images')
@@ -28,9 +31,25 @@ const fileStorageEngine = multer.diskStorage({
 const upload = multer({
     storage:fileStorageEngine
 })
+const server2 = http.createServer(server)
 
+const io = new Server(server2,{
+    cors:{
+        origin:'http://localhost:5000',
+        methods:["GET","POST"],
 
+    }
+})
 
+io.on("connection",(socket)=>{
+console.log('Connected socket');
+console.log(socket.id);
+
+socket.on("disconnect",()=>{
+    console.log("User disconnected",socket.id)
+})
+
+})
 const store = new MongoDBSession({
     uri:CONNECTION_URL,
     collection:"mySession",
@@ -201,20 +220,22 @@ server.get('/signIn',(req,res)=>{
 
 //Post handling 📤📤📤📤
 
-server.post('/createPost',upload.single("image"),(req,res)=>{
+server.post('/createPost',(req,res)=>{
     console.log(req.file);
     postModel.create({
         name:req.body.name,
         description:req.body.description,
-        imageSource:req.file
+      
     
 
     }).then(()=>{
+        console.log('post was created')
         res.json({
             post:'created'
         })
     
     }).catch(()=>{
+        console.log('post was deprecated')
         console.log('check')
     })
    
