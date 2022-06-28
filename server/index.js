@@ -93,7 +93,7 @@ server.get('/',(req,res)=>{
     
     res.json({});
 })
-server.listen(5000,()=>{
+server.listen(process.env.PORT,()=>{
     console.log('I wanna do this')
 })
 server.use(cookieParser())
